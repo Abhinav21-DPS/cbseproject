@@ -1,7 +1,7 @@
 import mysql.connector as ms
 from prettytable import PrettyTable
 
-mydb = ms.connect(host="localhost", user="root", password="______")
+mydb = ms.connect(host="localhost", user="root", password="2112007")
 if mydb.is_connected():
     cur = mydb.cursor()
     cur.execute("CREATE DATABASE IF NOT EXISTS Justice_Prison")
@@ -39,34 +39,41 @@ if mydb.is_connected():
         )
     """)
 def defaultval_prisoners():
-    cur.execute("""INSERT INTO PRISONERS VALUES
-               ('2024-01-15', 'Johnson', 'Fighting with another inmate', '10 days in isolation'),
-               ('2024-02-20', 'William', 'Possession of contraband', '30 days loss of privileges'),
-               ('2024-03-05', 'Harry', 'Attempted escape', '60 days in solitary'),
-               ('2024-04-12', 'Robert', 'Disrespecting staff', '5 days in isolation'),
-               ('2024-05-25', 'Chris', 'Altercation with guards', '20 days in solitary');
-               """)
+        cur.execute("""INSERT INTO prisoners (id, name, crime, penalty) VALUES
+            (1, "Johnson", "Robbery", 3000),
+            (2, "William", "War Crime", 10000),
+            (3, "Harry", "Assault", 2500),
+            (4, "Robert", "Fraud", 1200),
+            (5, "Chris", "Narcotics", 7500)
+        """)
+        mydb.commit()
+
 def defaultval_police_officers():
-    cur.execute("""INSERT INTO police_officers VALUES
-               (271,"Marco","Constable"),
-               (365,"Vincent","Sergeant");
-               (7,"Lewis","Cheif");
-               """)
+        cur.execute("""INSERT INTO police_officers (id, namex, rankx) VALUES
+            (271, "Marco", "Constable"),
+            (365, "Vincent", "Sergeant"),
+            (7, "Lewis", "Chief")
+        """)
+        mydb.commit()
+
 def defaultval_visitors():
-    cur.execute("""INSERT INTO VISITORS VALUES
-               ("Sarah",056332123,"Johnson"),
-               ("Miachel",0558429271,"Charles");
-               ("Andrew",021123832,"Robert");
-               ("Thomas",050244332,"Chris");
-               """)
+        cur.execute("""INSERT INTO visitors (id, visitor_name, contact_number, prisoner_name) VALUES
+            (1, "Sarah", "056332123", "Johnson"),
+            (2, "Michael", "0558429271", "Charles"),
+            (3, "Andrew", "021123832", "Robert"),
+            (4, "Thomas", "050244332", "Chris")
+        """)
+        mydb.commit()
+
 def defaultval_incidents():
-    cur.execute("""INSERT INTO INCIDENTS VALUES
-               (1,"Johnson","Robbery",3000),
-               (2,"William","War Crime",10000);
-               (3,"Harry","Assault",2500);
-               (4,"Robert","Fraud",1200);
-               (5,"Chris","Narcotics",7500);
-               """)
+        cur.execute("""INSERT INTO incidents (id, incident_date, prisoner_name, incident_details, punishment) VALUES
+            (1, '2024-01-15', 'Johnson', 'Fighting with another inmate', '10 days in isolation'),
+            (2, '2024-02-20', 'William', 'Possession of contraband', '30 days loss of privileges'),
+            (3, '2024-03-05', 'Harry', 'Attempted escape', '60 days in solitary'),
+            (4, '2024-04-12', 'Robert', 'Disrespecting staff', '5 days in isolation'),
+            (5, '2024-05-25', 'Chris', 'Altercation with guards', '20 days in solitary')
+        """)
+        mydb.commit()
 
 cur.execute("SELECT COUNT(*) FROM prisoners")
 if cur.fetchone()[0] == 0:
