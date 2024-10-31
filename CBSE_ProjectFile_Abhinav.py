@@ -1,7 +1,7 @@
 import mysql.connector as ms
 from prettytable import PrettyTable
 
-mydb = ms.connect(host="localhost", user="root", password="2112007")
+mydb = ms.connect(host="localhost", user="root", password="______")
 if mydb.is_connected():
     cur = mydb.cursor()
     cur.execute("CREATE DATABASE IF NOT EXISTS Justice_Prison")
