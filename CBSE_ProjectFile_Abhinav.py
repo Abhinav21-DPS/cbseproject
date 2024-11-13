@@ -110,10 +110,10 @@ cur.execute("SELECT COUNT(*) FROM medical_records")
 if cur.fetchone()[0] == 0:
     defaultval_medical_records()
         
-print("================================================================================")
-print('''                       WELCOME TO MY SECURE PRISON DATABASE
-                                By- Abhinav Subodh Menon''')
-print("================================================================================")
+print("========================================================================================================")
+print('''                              WELCOME TO MY SECURE PRISON DATABASE
+                                      By- Abhinav Subodh Menon''')
+print("========================================================================================================")
 
 ercount = 0
 while True:
@@ -133,6 +133,14 @@ while True:
             Choice: """))
             if choice == 1:
                 print("Loading Prisoners Table...")
+                print('''
+██████╗░██████╗░██╗░██████╗░█████╗░███╗░░██╗███████╗██████╗░░██████╗
+██╔══██╗██╔══██╗██║██╔════╝██╔══██╗████╗░██║██╔════╝██╔══██╗██╔════╝
+██████╔╝██████╔╝██║╚█████╗░██║░░██║██╔██╗██║█████╗░░██████╔╝╚█████╗░
+██╔═══╝░██╔══██╗██║░╚═══██╗██║░░██║██║╚████║██╔══╝░░██╔══██╗░╚═══██╗
+██║░░░░░██║░░██║██║██████╔╝╚█████╔╝██║░╚███║███████╗██║░░██║██████╔╝
+╚═╝░░░░░╚═╝░░╚═╝╚═╝╚═════╝░░╚════╝░╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝╚═════╝░
+''')
                 while True:
                     print(''' 
                 1 - Add Entry or Column
@@ -157,10 +165,7 @@ while True:
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
-                            defx = input("Type default value: ")
-                            if not defx.isdigit():
-                                defx = f"'{defx}'"
-                            cur.execute(f"ALTER TABLE PRISONERS ADD {cname} {dtype} DEFAULT {defx}")
+                            cur.execute(f"ALTER TABLE PRISONERS ADD {cname} {dtype}")
                             print("Column added.")
                         else:
                             print("Please enter a valid choice")
@@ -218,6 +223,13 @@ while True:
                         print("Please enter a valid choice.")
             elif choice == 2:
                 print("Loading Police Officers Table...")
+                print('''
+██████╗░░█████╗░██╗░░░░░██╗░█████╗░███████╗  ░█████╗░███████╗███████╗██╗░█████╗░███████╗██████╗░░██████╗
+██╔══██╗██╔══██╗██║░░░░░██║██╔══██╗██╔════╝  ██╔══██╗██╔════╝██╔════╝██║██╔══██╗██╔════╝██╔══██╗██╔════╝
+██████╔╝██║░░██║██║░░░░░██║██║░░╚═╝█████╗░░  ██║░░██║█████╗░░█████╗░░██║██║░░╚═╝█████╗░░██████╔╝╚█████╗░
+██╔═══╝░██║░░██║██║░░░░░██║██║░░██╗██╔══╝░░  ██║░░██║██╔══╝░░██╔══╝░░██║██║░░██╗██╔══╝░░██╔══██╗░╚═══██╗
+██║░░░░░╚█████╔╝███████╗██║╚█████╔╝███████╗  ╚█████╔╝██║░░░░░██║░░░░░██║╚█████╔╝███████╗██║░░██║██████╔╝
+╚═╝░░░░░░╚════╝░╚══════╝╚═╝░╚════╝░╚══════╝  ░╚════╝░╚═╝░░░░░╚═╝░░░░░╚═╝░╚════╝░╚══════╝╚═╝░░╚═╝╚═════╝░''')
                 while True:
                     print(''' 
                     1 - Add Entry or Column
@@ -243,10 +255,7 @@ while True:
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
-                            defx = input("Type default value: ")
-                            if not defx.isdigit():
-                                defx = f"'{defx}'"
-                            cur.execute(f"ALTER TABLE POLICE_OFFICERS ADD {cname} {dtype} DEFAULT {defx}")
+                            cur.execute(f"ALTER TABLE POLICE_OFFICERS ADD {cname} {dtype}")
                             print("Column added.")
                         else:
                             print("Please enter a valid choice.")
@@ -307,6 +316,13 @@ while True:
                         print("Please enter a valid choice.")
             elif choice == 3:
                 print("Loading Visitors Table...")
+                print('''
+██╗░░░██╗██╗░██████╗██╗████████╗░█████╗░██████╗░░██████╗
+██║░░░██║██║██╔════╝██║╚══██╔══╝██╔══██╗██╔══██╗██╔════╝
+╚██╗░██╔╝██║╚█████╗░██║░░░██║░░░██║░░██║██████╔╝╚█████╗░
+░╚████╔╝░██║░╚═══██╗██║░░░██║░░░██║░░██║██╔══██╗░╚═══██╗
+░░╚██╔╝░░██║██████╔╝██║░░░██║░░░╚█████╔╝██║░░██║██████╔╝
+░░░╚═╝░░░╚═╝╚═════╝░╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═════╝░''')
                 while True:
                     print(''' 
                     1 - Add Entry or Column
@@ -332,10 +348,7 @@ while True:
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
-                            defx = input("Type default value: ")
-                            if not defx.isdigit():
-                                defx = f"'{defx}'"
-                            cur.execute(f"ALTER TABLE VISITORS ADD {cname} {dtype} DEFAULT {defx}")
+                            cur.execute(f"ALTER TABLE VISITORS ADD {cname} {dtype}")
                             print("Column added.")
                         else:
                             print("Please enter a valid choice.")
@@ -397,6 +410,13 @@ while True:
             
             elif choice == 4:
                 print("Loading Incidents Table...")
+                print('''
+██╗███╗░░██╗░█████╗░██╗██████╗░███████╗███╗░░██╗████████╗░██████╗
+██║████╗░██║██╔══██╗██║██╔══██╗██╔════╝████╗░██║╚══██╔══╝██╔════╝
+██║██╔██╗██║██║░░╚═╝██║██║░░██║█████╗░░██╔██╗██║░░░██║░░░╚█████╗░
+██║██║╚████║██║░░██╗██║██║░░██║██╔══╝░░██║╚████║░░░██║░░░░╚═══██╗
+██║██║░╚███║╚█████╔╝██║██████╔╝███████╗██║░╚███║░░░██║░░░██████╔╝
+╚═╝╚═╝░░╚══╝░╚════╝░╚═╝╚═════╝░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░╚═════╝░''')
                 while True:
                     print(''' 
                     1 - Add Entry or Column
@@ -423,10 +443,7 @@ while True:
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
-                            defx = input("Type default value: ")
-                            if not defx.isdigit():
-                                defx = f"'{defx}'"
-                            cur.execute(f"ALTER TABLE INCIDENTS ADD {cname} {dtype} DEFAULT {defx}")
+                            cur.execute(f"ALTER TABLE INCIDENTS ADD {cname} {dtype}")
                             print("Column added.")
                         else:
                             print("Please enter a valid choice.")
@@ -487,6 +504,13 @@ while True:
                         print("Please enter a valid choice.")
             elif choice == 5:
                 print("Loading Medical Records Table...")
+                print('''
+███╗░░░███╗███████╗██████╗░██╗░█████╗░░█████╗░██╗░░░░░  ██████╗░███████╗░█████╗░░█████╗░██████╗░██████╗░░██████╗
+████╗░████║██╔════╝██╔══██╗██║██╔══██╗██╔══██╗██║░░░░░  ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔══██╗██╔══██╗██╔════╝
+██╔████╔██║█████╗░░██║░░██║██║██║░░╚═╝███████║██║░░░░░  ██████╔╝█████╗░░██║░░╚═╝██║░░██║██████╔╝██║░░██║╚█████╗░
+██║╚██╔╝██║██╔══╝░░██║░░██║██║██║░░██╗██╔══██║██║░░░░░  ██╔══██╗██╔══╝░░██║░░██╗██║░░██║██╔══██╗██║░░██║░╚═══██╗
+██║░╚═╝░██║███████╗██████╔╝██║╚█████╔╝██║░░██║███████╗  ██║░░██║███████╗╚█████╔╝╚█████╔╝██║░░██║██████╔╝██████╔╝
+╚═╝░░░░░╚═╝╚══════╝╚═════╝░╚═╝░╚════╝░╚═╝░░╚═╝╚══════╝  ╚═╝░░╚═╝╚══════╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚═════╝░╚═════╝░''')
                 while True:
                     print(''' 
                     1 - Add Entry or Column
@@ -515,10 +539,7 @@ while True:
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
-                            defx = input("Type default value: ")
-                            if not defx.isdigit():
-                                defx = f"'{defx}'"
-                            cur.execute(f"ALTER TABLE medical_records ADD {cname} {dtype} DEFAULT {defx}")
+                            cur.execute(f"ALTER TABLE medical_records ADD {cname} {dtype}")
                             print("Column added.")
                         else:
                             print("Please enter a valid choice.")
