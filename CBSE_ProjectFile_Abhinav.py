@@ -23,20 +23,19 @@ if mydb.is_connected():
     """)
     cur.execute("""
         CREATE TABLE IF NOT EXISTS VISITORS (
-            id INT PRIMARY KEY,
             visitor_name VARCHAR(20),
             contact_number INT,
             prisoner_name VARCHAR(20)
         )
     """)
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS INCIDENTS (
-            id INT PRIMARY KEY,
-            incident_date DATE,
-            prisoner_name VARCHAR(200),
-            incident_details VARCHAR(200),
-            punishment VARCHAR(300)
-        )
+    CREATE TABLE IF NOT EXISTS INCIDENTS (
+        incident_id INT PRIMARY KEY,
+        incident_date DATE,
+        prisoner_name VARCHAR(200),
+        incident_details VARCHAR(200),
+        punishment VARCHAR(300)
+    )
     """)
     cur.execute("""
         CREATE TABLE IF NOT EXISTS medical_records (
@@ -67,23 +66,24 @@ def defaultval_police_officers():
         mydb.commit()
 
 def defaultval_visitors():
-        cur.execute("""INSERT INTO visitors (id, visitor_name, contact_number, prisoner_name) VALUES
-            (1, "Sarah", "056332123", "Johnson"),
-            (2, "Michael", "0558429271", "Charles"),
-            (3, "Andrew", "021123832", "Robert"),
-            (4, "Thomas", "050244332", "Chris")
+        cur.execute("""INSERT INTO visitors (visitor_name, contact_number, prisoner_name) VALUES
+            ("Sarah", "056332123", "Johnson"),
+            ("Michael", "0558429271", "Charles"),
+            ("Andrew", "021123832", "Robert"),
+            ("Thomas", "050244332", "Chris")
         """)
         mydb.commit()
 
 def defaultval_incidents():
-        cur.execute("""INSERT INTO incidents (id, incident_date, prisoner_name, incident_details, punishment) VALUES
+    cur.execute("""
+        INSERT INTO incidents VALUES
             (1, '2024-01-15', 'Johnson', 'Fighting with another inmate', '10 days in isolation'),
             (2, '2024-02-20', 'William', 'Possession of contraband', '30 days loss of privileges'),
             (3, '2024-03-05', 'Harry', 'Attempted escape', '60 days in solitary'),
             (4, '2024-04-12', 'Robert', 'Disrespecting staff', '5 days in isolation'),
             (5, '2024-05-25', 'Chris', 'Altercation with guards', '20 days in solitary')
-        """)
-        mydb.commit()
+    """)
+    mydb.commit()
 def defaultval_medical_records():
         cur.execute("""INSERT INTO medical_records (record_id,prisoner_id,diagnosis,treatment,date_of_treatment,doctor_in_charge) VALUES
             (1,1,"Hypertension","Medication","2024-03-15","Jim Carter"),
@@ -118,7 +118,7 @@ print("=========================================================================
 ercount = 0
 while True:
     password = eval(input("Type the secure 4 digit code to access the database: "))    
-    # 2112
+    # Password is 2112
     if password == 2112:
         print("Access Granted.")
         while True:
@@ -359,10 +359,10 @@ while True:
                     2 - Delete Column
                     3 - Delete Table: '''))    
                         if chx == 1:
-                            visitor_id = eval(input("Type the visitor ID you want to delete: "))
-                            cur.execute(f"DELETE FROM VISITORS WHERE id = {visitor_id}")
-                            mydb.commit()
-                            print("Entry Removed.")
+                           visitor_namex = input("Type the visitor name you want to delete: ")
+                           cur.execute("DELETE FROM VISITORS WHERE visitor_name = %s", (visitor_namex,))
+                           mydb.commit()
+                           print("Entry Removed.")
                         elif chx == 2:
                             dname = input("Type the column name you want to delete: ")
                             cur.execute(f"ALTER TABLE VISITORS DROP COLUMN {dname}")
@@ -374,19 +374,19 @@ while True:
                             print("Table deleted.")
 
                     elif ch == 3:
-                        visitor_id = int(input("Type the visitor ID whose details you want to change: "))
-                        change = input(f"What do you want to change for visitor with ID {visitor_id}? ")
+                        visitor_name = input("Type the visitor ID whose details you want to change: ")
+                        change = input(f"What do you want to change for visitor with name {visitor_name}? ")
                         changey = input(f"What do you want to change '{change}' to? ")
-                        cur.execute(f"UPDATE VISITORS SET {change} = %s WHERE id = %s", (changey, visitor_id))
+                        cur.execute(f"UPDATE VISITORS SET {change} = %s WHERE visitor_name = %s", (changey, visitor_name))
                         mydb.commit()
                         print("Record Updated.")
 
                     elif ch == 4:
                         row = PrettyTable()
                         cur.execute("DESCRIBE VISITORS")
-                        l = [i[0] for i in cur]
-                        visitor_id = int(input("Type the visitor ID: "))
-                        cur.execute(f"SELECT * FROM VISITORS WHERE id = {visitor_id}")
+                        l = [i[0] for i in cur.fetchall()]
+                        visitor_namex = input("Type the visitor name: ")
+                        cur.execute("SELECT * FROM VISITORS WHERE visitor_name = %s", (visitor_namex,))
                         row.field_names = l
                         for i in cur:
                             row.add_row(i)
@@ -433,18 +433,28 @@ while True:
                     2 - Add Column
                     Choice: '''))
                         if chx == 1:
-                            incident_date = input("Type incident date: ")
-                            prisoner_name  = input("Type name of prisoner who committed the incident: ")
+                            incident_id = int(input("Type incident id: ")) 
+                            incident_date = input("Type incident date (YYYY-MM-DD): ")  
+                            prisoner_name = input("Type name of prisoner who committed the incident: ")
                             incident_details = input("Type incident details: ")
                             punishment = input("Type the punishment the offender: ")
-                            cur.execute('INSERT INTO INCIDENTS (incident_date,prisoner_name, incident_details,punishment) VALUES (%s, %s,%s,%s)', (incident_date,prisoner_name, incident_details,punishment))
+                            cur.execute("""
+                                INSERT INTO INCIDENTS (incident_id, incident_date, prisoner_name, incident_details, punishment)
+                                VALUES (%s, %s, %s, %s, %s)
+                            """, (incident_id, incident_date, prisoner_name, incident_details, punishment))
                             mydb.commit()
                             print("Entry Added.")
                         elif chx == 2:
-                            cname = input("Type column name: ")
-                            dtype = input("Type data type: ")
-                            cur.execute(f"ALTER TABLE INCIDENTS ADD {cname} {dtype}")
-                            print("Column added.")
+                            cname = input("Type column name: ").strip() 
+                            dtype = input("Type data type: ").strip() 
+                            
+                            try:
+                                query = f"ALTER TABLE INCIDENTS ADD COLUMN {cname} {dtype}"
+                                cur.execute(query)
+                                mydb.commit()
+                                print("Column Added.")
+                            except:
+                                print("Error")
                         else:
                             print("Please enter a valid choice.")
                     
@@ -454,10 +464,12 @@ while True:
                     2 - Delete Column
                     3 - Delete Table: '''))    
                         if chx == 1:
-                            incident_id = eval(input("Type the incident ID you want to delete: "))
-                            cur.execute(f"DELETE FROM INCIDENTS WHERE id = {incident_id}")
+                            incident_id = int(input("Type the incident ID you want to delete: "))  
+                            cur.execute("DELETE FROM INCIDENTS WHERE incident_id = %s", (incident_id,)) 
                             mydb.commit()
                             print("Entry Removed.")
+
+                  
                         elif chx == 2:
                             dname = input("Type the column name you want to delete: ")
                             cur.execute(f"ALTER TABLE INCIDENTS DROP COLUMN {dname}")
@@ -467,21 +479,22 @@ while True:
                             cur.execute("DROP TABLE INCIDENTS")
                             mydb.commit()
                             print("Table deleted.")
+                    elif ch==3:
+                         incident_id = int(input("Type the incident ID whose details you want to change: "))
+                         change = input(f"What do you want to change for incident with ID {incident_id}? ")
+                         changey = input(f"What do you want to change '{change}' to? ")
+                         cur.execute(f"UPDATE INCIDENTS SET {change} = %s WHERE incident_id = %s", (changey, incident_id))
+                         mydb.commit()
+                         print("Record Updated.")
                     
-                    elif ch == 3:
-                        incident_id = int(input("Type the incident ID whose details you want to change: "))
-                        change = input(f"What do you want to change for incident with ID {incident_id}? ")
-                        changey = input(f"What do you want to change '{change}' to? ")
-                        cur.execute(f"UPDATE INCIDENTS SET {change} = %s WHERE id = %s", (changey, incident_id))
-                        mydb.commit()
-                        print("Record Updated.")
-                    
+                     
+                                                
                     elif ch == 4:
                         row = PrettyTable()
                         cur.execute("DESCRIBE INCIDENTS")
                         l = [i[0] for i in cur]
                         incident_id = int(input("Type the incident ID: "))
-                        cur.execute(f"SELECT * FROM INCIDENTS WHERE id = {incident_id}")
+                        cur.execute(f"SELECT * FROM INCIDENTS WHERE incident_id = {incident_id}")
                         row.field_names = l
                         for i in cur:
                             row.add_row(i)
@@ -527,15 +540,24 @@ while True:
                     2 - Add Column
                     Choice: '''))
                         if chx == 1:
-                            record_id = input("Type record id: ")
-                            prisoner_id = input("Type prisoner name: ")
+                            record_id = int(input("Type record id: "))  
+                            prisoner_id = int(input("Type prisoner id: "))  
                             diagnosis = input("Type diagnosis of prisoner: ")
                             treatment = input("Type treatment to be done: ")
-                            date_of_treatment = input("Type date of treatment: ")
+                            date_of_treatment = input("Type date of treatment (YYYY-MM-DD): ") 
                             doctor_in_charge = input("Type name of doctor in charge: ")
-                            cur.execute('INSERT INTO medical_records VALUES (%s, %s, %s, %s, %s, %s)', (record_id,prisoner_id,diagnosis,treatment,date_of_treatment,doctor_in_charge))
-                            mydb.commit()
-                            print("Entry Added.")
+                            query = '''
+                                INSERT INTO medical_records 
+                                (record_id, prisoner_id, diagnosis, treatment, date_of_treatment, doctor_in_charge)
+                                VALUES (%s, %s, %s, %s, %s, %s)
+                            '''
+                            values = (record_id, prisoner_id, diagnosis, treatment, date_of_treatment, doctor_in_charge)
+                            try:
+                                cur.execute(query, values)
+                                mydb.commit()
+                                print("Entry Added.")
+                            except Exception as e:
+                                print("Record not found in prison database")
                         elif chx == 2:
                             cname = input("Type column name: ")
                             dtype = input("Type data type: ")
@@ -601,6 +623,13 @@ while True:
             
             elif choice == 6:
                 print("Exiting Database...")
+                print('''
+ _____ _                 _     __   __                 ______   _______ _ _ _ 
+|_   _| |__   __ _ _ __ | | __ \ \ / /__  _   _       | __ ) \ / / ____| | | |
+  | | | '_ \ / _` | '_ \| |/ /  \ V / _ \| | | |      |  _ \\ V /|  _| | | | |
+  | | | | | | (_| | | | |   <    | | (_) | |_| |      | |_) || | | |___|_|_|_|
+  |_| |_| |_|\__,_|_| |_|_|\_\   |_|\___/ \__,_|      |____/ |_| |_____(_|_|_)
+  ''')
                 quit()
        
             else:
